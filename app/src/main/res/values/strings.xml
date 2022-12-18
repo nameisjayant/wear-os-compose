@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Focus work</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="task_screen">Task Screen</string>
+    <string name="report_screen">Report Screen</string>
+    <string name="info_screen">Info Screen</string>
+    <string name="set">Set</string>
+    <string name="start">Start</string>
+</resources>
