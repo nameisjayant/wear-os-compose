@@ -1,5 +1,6 @@
 package com.example.focusworkwearapp.presentation.features.navigation
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -7,10 +8,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.focusworkwearapp.presentation.features.ui.screens.*
 import com.example.focusworkwearapp.presentation.features.ui.viewmodel.MainViewModel
+import com.example.focusworkwearapp.presentation.service.StopwatchService
 
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun MainNavigation() {
+fun MainNavigation(
+    stopwatchService: StopwatchService
+) {
     val navHostController = rememberNavController()
     val viewModel: MainViewModel = viewModel()
 
@@ -30,7 +35,7 @@ fun MainNavigation() {
             InfoScreen()
         }
         composable(Navigators.Timer.route) {
-            TimerScreen(viewModel = viewModel)
+            TimerScreen(viewModel = viewModel,stopwatchService)
         }
     }
 }
