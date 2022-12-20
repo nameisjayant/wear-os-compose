@@ -6,7 +6,7 @@
     -->
     <string name="something_went_wrong">Something went wrong</string>
     <string name="task_screen">Task Screen</string>
-    <string name="report_screen">Report Screen</string>
+    <string name="report_screen">Regression Screen</string>
     <string name="info_screen">Info Screen</string>
     <string name="set">Set</string>
     <string name="start">Start</string>

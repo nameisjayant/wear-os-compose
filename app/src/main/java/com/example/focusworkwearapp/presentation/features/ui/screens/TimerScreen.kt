@@ -1,10 +1,15 @@
 package com.example.focusworkwearapp.presentation.features.ui.screens
 
 import android.app.RemoteInput
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.inputmethodservice.Keyboard.Row
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.provider.Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS
+import android.text.TextUtils
 import android.view.inputmethod.EditorInfo
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -61,6 +66,8 @@ fun TimerScreen(
     viewModel: MainViewModel,
     stopwatchService: StopwatchService
 ) {
+    val ACTION_NOTIFICATION_LISTENER_SETTINGS =
+        "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"
     val data = viewModel.task.value
     val levels by remember { mutableStateOf(listOf(LEVEL1, LEVEL2, LEVEL3)) }
     val context = LocalContext.current
@@ -210,7 +217,7 @@ fun TimerScreen(
                         .fillMaxHeight(0.8f),
                     onClick = {
                         viewModel.setBooleanPref(PreferenceStore.isRunning, false)
-                        //  context.startActivity(Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS))
+                        //   context.startActivity(Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS))
                         ServiceHelper.triggerForegroundService(
                             context = context, action = ACTION_SERVICE_CANCEL
                         )
@@ -223,62 +230,6 @@ fun TimerScreen(
             }
         }
 
-//        item {
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(5.dp),
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                Row(
-//                    modifier = Modifier.fillMaxWidth()
-//                ) {
-//                    TextInput(
-//                        modifier = Modifier.align(CenterVertically)
-//                    ) {
-//                        timer = it
-//                    }
-//                    Spacer(modifier = Modifier.width(5.dp))
-//                    Button(onClick = {
-//                        if (timer.isNotEmpty())
-//                            setTimerState = false
-//                    }, enabled = setTimerState) {
-//                        Text(text = stringResource(R.string.set), color = Color.White)
-//                    }
-//                }
-//                Spacer(modifier = Modifier.height(10.dp))
-//                if (timer.isNotEmpty())
-//                    CountDownTimerScreen(
-//                        totalTime = minToLong,
-//                        startTimer = startTimerState,
-//                        onTimeUpdate = { timer = it }
-//                    ) {
-//                        startTimerState = it
-//                        setTimerState = it
-//                    }
-//                Spacer(modifier = Modifier.height(10.dp))
-//                Row {
-//                    Button(
-//                        onClick = {
-//                            if (timer.isNotEmpty()) {
-//                                startTimerState = false
-//                                setTimerState = false
-//                            }
-//                        },
-//                        enabled = startTimerState
-//                    ) {
-//                        Text(text = stringResource(R.string.start), color = Color.White)
-//                    }
-//                    Button(onClick = {
-//                        timer = ""
-//                        setTimerState = true
-//                        startTimerState = true
-//                    }, modifier = Modifier.padding(start = 10.dp)) {
-//                        Text(text = stringResource(R.string.reset), color = Color.White)
-//                    }
-//                }
-//            }
-//        }
 
     }
 
@@ -293,42 +244,6 @@ fun addAnimation(duration: Int = 600): ContentTransform {
     )
 }
 
-@Composable
-fun CountDownTimerScreen(
-    totalTime: Long,
-    startTimer: Boolean,
-    onTimeUpdate: (String) -> Unit,
-    onButtonEnable: (Boolean) -> Unit
-) {
-
-    var currentTime by remember {
-        mutableStateOf(totalTime)
-    }
-    val minutes = (currentTime / 1000).toInt() / 60
-    val seconds = (currentTime / 1000).toInt() % 60
-
-
-    val res = java.lang.String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
-
-    if (!startTimer)
-        LaunchedEffect(key1 = currentTime) {
-
-            if (currentTime > 0) {
-                delay(100L)
-                currentTime -= 100L
-            } else {
-                onButtonEnable(true)
-                onTimeUpdate("")
-            }
-        }
-
-    Text(
-        text = res,
-        fontWeight = FontWeight.Bold,
-        color = Color.White
-    )
-
-}
 
 @Composable
 fun CommonRadioButton(
@@ -355,47 +270,28 @@ fun CommonRadioButton(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.M)
+private fun isNotificationServiceEnabled(
+    context: Context
+): Boolean {
 
-@Composable
-fun TextInput(
-    modifier: Modifier = Modifier,
-    onValueChange: (String) -> Unit,
-) {
-    val launcher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            it.data?.let { data ->
-                val results: Bundle = RemoteInput.getResultsFromIntent(data)
-                val ipAddress: CharSequence? = results.getCharSequence("timer")
-                onValueChange(ipAddress as String)
+    val ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners"
+
+    val pkgName = context.packageName
+    val flat = Settings.Secure.getString(
+        context.contentResolver, ENABLED_NOTIFICATION_LISTENERS
+    )
+    if (!TextUtils.isEmpty(flat)) {
+        val names = flat.split(":").toTypedArray()
+        for (i in names.indices) {
+            val cn = ComponentName.unflattenFromString(names[i])
+            if (cn != null) {
+                if (TextUtils.equals(pkgName, cn.packageName)) {
+                    return true
+                }
             }
         }
-    Chip(
-        label = {
-            Text(
-                "Enter Min",
-                fontSize = 10.sp,
-                color = Color.Gray,
-                fontWeight = FontWeight.Normal
-            )
-        },
-        onClick = {
-            val intent: Intent = RemoteInputIntentHelper.createActionRemoteInputIntent();
-            val remoteInputs: List<RemoteInput> = listOf(
-                RemoteInput.Builder("timer")
-                    .setLabel("Enter Min")
-                    .wearableExtender {
-                        setEmojisAllowed(false)
-                        setInputActionType(EditorInfo.IME_ACTION_DONE)
-                    }.build()
-            )
-
-            RemoteInputIntentHelper.putRemoteInputsExtra(intent, remoteInputs)
-
-            launcher.launch(intent)
-        },
-        modifier = modifier
-            .width(80.dp)
-            .height(30.dp),
-        shape = RoundedCornerShape(5.dp)
-    )
+    }
+    return false
 }
+
