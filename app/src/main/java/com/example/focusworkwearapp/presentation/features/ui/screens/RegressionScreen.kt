@@ -130,7 +130,7 @@ fun RegressionScreen(
 
                 }, modifier = Modifier.padding(top = 20.dp)
             ) {
-                Text(text = "Ok", color = Color.White, fontSize = 12.sp)
+                Text(text = stringResource(id = R.string.ok), color = Color.White, fontSize = 12.sp)
             }
         }
 
@@ -145,7 +145,7 @@ fun RegressionScreen(
                     fontSize = 13.sp
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                if (viewModel.state.text != null) {
+                if (viewModel.state.text != null && viewModel.state.text != "null") {
                     Text(
                         text = viewModel.state.text?.replace(oldChar = '[', newChar = ' ')
                             ?.replace(']', ' ') ?: "",
@@ -158,7 +158,7 @@ fun RegressionScreen(
 
         if (currentIndex < 6) Button(
             onClick = {
-                if (viewModel.state.text != null) {
+                if (viewModel.state.text != null && viewModel.state.text != "null") {
                     addQuestionList.add(
                         Questions(
                             questionList[currentIndex].id,

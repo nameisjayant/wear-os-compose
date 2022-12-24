@@ -11,4 +11,5 @@
     <string name="thank_you_response">Thank you for your answers, you can see your answer in the phone.</string>
     <string name="no_answer">No Answer</string>
     <string name="answer_this_question">Please answer of this question!</string>
+    <string name="ok">OK</string>
 </resources>
