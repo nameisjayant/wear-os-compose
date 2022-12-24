@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name">Focus work</string>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
     <string name="something_went_wrong">Something went wrong</string>
     <string name="task_screen">Task Screen</string>
     <string name="report_screen">Regression Screen</string>
@@ -11,4 +7,8 @@
     <string name="set">Set</string>
     <string name="start">Start</string>
     <string name="reset">Reset</string>
+    <string name="speak_something">Speak Something</string>
+    <string name="thank_you_response">Thank you for your answers, you can see your answer in the phone.</string>
+    <string name="no_answer">No Answer</string>
+    <string name="answer_this_question">Please answer of this question!</string>
 </resources>

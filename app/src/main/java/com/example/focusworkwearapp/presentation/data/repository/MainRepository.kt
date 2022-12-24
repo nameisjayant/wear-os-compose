@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 import com.example.focusworkwearapp.presentation.common.Result
+import com.example.focusworkwearapp.utils.QUESTIONS
+import com.example.focusworkwearapp.utils.Questions
+import com.example.focusworkwearapp.utils.TASK
 
 class MainRepository @Inject constructor(
     private val db: DatabaseReference
@@ -37,10 +40,30 @@ class MainRepository @Inject constructor(
 
         }
 
-        db.addValueEventListener(valueEvent)
+        db.child(TASK).addValueEventListener(valueEvent)
         awaitClose {
-            db.removeEventListener(valueEvent)
+            db.child(TASK).removeEventListener(valueEvent)
             close()
+        }
+    }
+
+
+    suspend fun addQuestions(
+        questions: List<Questions>
+    ): Flow<Result<String>> = callbackFlow {
+
+        trySend(Result.Loading)
+
+        db.child(QUESTIONS)
+            .push().setValue(questions)
+            .addOnCompleteListener {
+                trySend(Result.Success("Thank You"))
+            }.addOnFailureListener {
+                trySend(Result.Failure(it))
+            }
+
+        awaitClose {
+
         }
     }
 

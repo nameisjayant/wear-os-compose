@@ -29,7 +29,7 @@ fun MainNavigation(
             TaskScreen(viewModel, navHostController)
         }
         composable(Navigators.Report.route) {
-            ReportScreen()
+            RegressionScreen(navHostController)
         }
         composable(Navigators.Info.route) {
             InfoScreen()
