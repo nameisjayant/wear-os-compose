@@ -9,26 +9,26 @@ data class Questions(
 val questionList = listOf(
     Questions(
         1,
-        "What did i like about my dad?"
+        "What did you like about your day?"
     ),
     Questions(
         2,
-        "Did you accomplish everything on your To-Do list?"
+        "Have you completed all the tasks on your to-do list?"
     ),
     Questions(
         3,
-        "Is there anything you could have done differently?"
+        "Could you have done anything differently?"
     ),
     Questions(
         4,
-        "Is there anything you would like to keep the same?"
+        "On the scale of 1-10, how distracted where you today?"
     ),
     Questions(
         5,
-        "Is there any negativity you don't want to cary into tomorrow?"
+        "Are there any aspects that you would like to remain the same?"
     ),
     Questions(
         6,
-        "Did you behave well with the distractions?"
+        "Do you want to add any To-do for tomorrow?"
     )
 )

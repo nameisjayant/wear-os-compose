@@ -17,6 +17,7 @@
         </intent>
     </queries>
 
+
     <application
         android:name=".presentation.BaseApplication"
         android:allowBackup="true"

@@ -94,7 +94,7 @@ fun TaskEachRow(
         onClick = { onClick() },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp),
+            .padding(vertical = 5.dp, horizontal = 20.dp),
     ) {
         Box(
             modifier = Modifier

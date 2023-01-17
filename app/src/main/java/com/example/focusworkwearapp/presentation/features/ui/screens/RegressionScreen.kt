@@ -118,7 +118,8 @@ fun RegressionScreen(
             Text(
                 text = stringResource(R.string.thank_you_response), style = TextStyle(
                     color = Orange, fontSize = 12.sp, fontWeight = FontWeight.Bold
-                ), textAlign = TextAlign.Center
+                ), textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 20.dp)
             )
             Button(
                 onClick = {
@@ -135,14 +136,16 @@ fun RegressionScreen(
         }
 
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
         ) {
             if (currentIndex < 6) {
                 Text(
                     text = "${questionList[currentIndex].id}).  ${questionList[currentIndex].question}",
                     color = Color.White,
                     textAlign = TextAlign.Center,
-                    fontSize = 13.sp
+                    fontSize = 13.sp,
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 if (viewModel.state.text != null && viewModel.state.text != "null") {
@@ -186,7 +189,8 @@ fun RegressionScreen(
             )
         }
 
-        if (currentIndex < 6) Icon(Icons.Default.Mic,
+        if (currentIndex < 6)
+            Icon(Icons.Default.Mic,
             contentDescription = "",
             tint = Orange,
             modifier = Modifier
